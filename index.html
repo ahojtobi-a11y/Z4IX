@@ -1,419 +1,581 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="sk">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0f172a">
+<title>Revízor.fun – Žilina MHD</title>
+<style>
+:root{
+  --bg:#f3f5f8;--card:#fff;--text:#111827;--muted:#64748b;--primary:#0f172a;
+  --accent:#2563eb;--accent2:#e0e7ff;--danger:#dc2626;--line:#e5e7eb;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--text)}
+button,select,input{font:inherit}
+.app{max-width:560px;margin:auto;min-height:100vh;padding-bottom:90px}
+.top{background:var(--primary);color:white;padding:22px 18px 28px;border-radius:0 0 24px 24px}
+.top small{opacity:.7}.top h1{margin:6px 0 0;font-size:27px}
+.content{padding:16px}
+.hero{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:18px;margin-top:-4px;box-shadow:0 8px 30px rgba(15,23,42,.06)}
+.hero h2{margin:0 0 7px;font-size:21px}.hero p{margin:0;color:var(--muted);line-height:1.45}
+.big-btn{width:100%;border:0;border-radius:17px;padding:17px;margin-top:16px;background:var(--accent);color:white;font-weight:800;font-size:17px}
+.section{margin-top:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:16px}
+.hidden{display:none}
+.step{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.step .n{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:var(--accent2);color:#3730a3;font-weight:800}
+.step strong{font-size:16px}
+label{display:block;margin:14px 0 7px;font-weight:700;font-size:14px}
+select{width:100%;padding:14px;border:1px solid #d7dce3;border-radius:13px;background:#fff;color:var(--text)}
+.route-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
+.route-btn{border:1px solid var(--line);background:#fff;border-radius:14px;padding:13px 7px;font-weight:800;min-height:54px}
+.route-btn.active{background:var(--primary);color:white;border-color:var(--primary)}
+.meta{color:var(--muted);font-size:13px;line-height:1.4;margin-top:8px}
+.back{border:0;background:transparent;padding:8px 0;margin-bottom:8px;color:var(--muted);font-weight:800}
+.primary,.ghost{border:0;border-radius:13px;padding:14px 16px;font-weight:800}
+.primary{background:var(--accent);color:white;width:100%;margin-top:14px}
+.ghost{background:#eef2f7;color:var(--primary);width:100%;margin-top:9px}
+.notice{margin-top:12px;padding:12px;border-radius:13px;background:#f8fafc;border:1px solid var(--line);font-size:13px;color:#475569;line-height:1.45}
+.success{margin-top:12px;padding:14px;border-radius:13px;background:#ecfdf5;color:#065f46;border:1px solid #a7f3d0;font-weight:700}
+.code-display{display:flex;justify-content:center;gap:12px;margin:14px 0 16px}
+.code-display span{width:48px;height:54px;border:1px solid #d7dce3;border-radius:13px;background:#fff;display:grid;place-items:center;font-size:28px;font-weight:800}
+.keypad{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.keypad button{border:1px solid var(--line);background:#fff;border-radius:14px;min-height:58px;font-size:21px;font-weight:800}
+.keypad button:active,.choice-btn:active{transform:scale(.98)}
+.key-empty{visibility:hidden}
+.code-choices{margin-top:16px}
+.choice-title{font-weight:800;margin-bottom:9px}
+.choice-btn{width:100%;border:1px solid var(--line);background:#fff;border-radius:14px;padding:15px;margin-top:8px;text-align:left;font-weight:800;font-size:16px}
 
-  <title>Z4IX | Minecraft Creator</title>
-
-  <meta name="description"
-        content="Z4IX Minecraft creator. BedWars videos, YouTube shorts, gameplay and dark purple Minecraft content.">
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Z4IX | Minecraft</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-  <style>
-    :root{
-      --bg:#040206;
-      --bg2:#09030f;
-      --card:rgba(255,255,255,.06);
-      --stroke:rgba(255,255,255,.10);
-      --text:#f5f0ff;
-      --muted:rgba(245,240,255,.70);
-      --purple:#a855f7;
-      --purple2:#d946ef;
-      --shadow:0 0 35px rgba(168,85,247,.22);
-      --radius:28px;
-    }
-
-    *{box-sizing:border-box;margin:0;padding:0}
-    html{scroll-behavior:smooth}
-    body{
-      font-family:Orbitron,system-ui,sans-serif;
-      background:radial-gradient(circle at top, rgba(168,85,247,.18), transparent 28%),
-                 radial-gradient(circle at bottom, rgba(217,70,239,.10), transparent 35%),
-                 linear-gradient(180deg, var(--bg2), var(--bg));
-      color:var(--text);
-      overflow-x:hidden;
-    }
-
-    /* Animated background */
-    .bg-grid,
-    .bg-pulse,
-    .bg-pulse2{
-      position:fixed; inset:0; pointer-events:none; z-index:-3;
-    }
-    .bg-grid{
-      background-image:
-        linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
-      background-size:72px 72px;
-      opacity:.55;
-    }
-    .bg-pulse{
-      background:radial-gradient(circle at 25% 15%, rgba(168,85,247,.20), transparent 22%),
-                 radial-gradient(circle at 80% 20%, rgba(217,70,239,.12), transparent 18%);
-      filter:blur(24px);
-      animation:float1 14s ease-in-out infinite alternate;
-    }
-    .bg-pulse2{
-      background:radial-gradient(circle at 15% 75%, rgba(168,85,247,.12), transparent 18%),
-                 radial-gradient(circle at 85% 85%, rgba(217,70,239,.10), transparent 18%);
-      filter:blur(30px);
-      animation:float2 16s ease-in-out infinite alternate;
-    }
-    @keyframes float1{from{transform:translate3d(0,0,0) scale(1)}to{transform:translate3d(20px,18px,0) scale(1.06)}}
-    @keyframes float2{from{transform:translate3d(0,0,0) scale(1)}to{transform:translate3d(-18px,14px,0) scale(1.08)}}
-
-    .particles{position:fixed; inset:0; pointer-events:none; z-index:-2; overflow:hidden}
-    .particle{
-      position:absolute; width:6px; height:6px; background:#c084fc; box-shadow:0 0 16px #a855f7;
-      animation:rise linear infinite;
-      border-radius:2px; opacity:.75;
-    }
-    @keyframes rise{
-      from{transform:translateY(110vh) scale(.7); opacity:0}
-      10%{opacity:1}
-      to{transform:translateY(-20vh) scale(1.2); opacity:0}
-    }
-
-    .container{width:min(1280px, calc(100% - 32px)); margin:0 auto}
-
-    header{
-      position:sticky; top:0; z-index:50;
-      backdrop-filter:blur(16px);
-      background:rgba(0,0,0,.28);
-      border-bottom:1px solid rgba(255,255,255,.08);
-    }
-    .nav{
-      display:flex; align-items:center; justify-content:space-between;
-      padding:18px 0;
-    }
-    .brand{display:flex; align-items:center; gap:14px; text-decoration:none; color:inherit}
-    .brand-mark{
-      width:48px; height:48px; border-radius:18px;
-      display:grid; place-items:center;
-      background:linear-gradient(135deg, rgba(168,85,247,.95), rgba(217,70,239,.85));
-      box-shadow:var(--shadow); font-weight:900; font-size:20px;
-    }
-    .brand-text strong{display:block; font-size:24px; letter-spacing:.20em}
-    .brand-text span{display:block; color:var(--muted); font-size:12px; letter-spacing:.26em; margin-top:3px}
-
-    .nav-links{display:flex; gap:10px; align-items:center; flex-wrap:wrap}
-    .nav-links a{
-      color:var(--text); text-decoration:none; font-size:13px; letter-spacing:.08em;
-      padding:10px 14px; border-radius:999px; border:1px solid transparent; transition:.25s ease;
-    }
-    .nav-links a:hover{background:rgba(255,255,255,.06); border-color:var(--stroke)}
-
-    .hero{padding:52px 0 24px}
-    .hero-grid{display:grid; grid-template-columns:1.08fr .92fr; gap:26px; align-items:center}
-    .eyebrow{
-      display:inline-flex; align-items:center; gap:8px;
-      padding:10px 14px; border-radius:999px;
-      background:rgba(168,85,247,.10); border:1px solid rgba(168,85,247,.24);
-      color:#e9d5ff; font-size:12px; letter-spacing:.22em; text-transform:uppercase;
-    }
-    h1{
-      font-size:clamp(52px, 8vw, 96px); line-height:.92; letter-spacing:-.03em;
-      margin-top:18px;
-    }
-    h1 .accent{
-      display:block; background:linear-gradient(90deg, #e9d5ff, #c084fc, #d946ef);
-      -webkit-background-clip:text; background-clip:text; color:transparent;
-      filter:drop-shadow(0 0 18px rgba(168,85,247,.30));
-    }
-    .lead{max-width:680px; margin-top:18px; color:var(--muted); line-height:1.8; font-size:16px}
-
-    .actions{display:flex; gap:12px; flex-wrap:wrap; margin-top:24px}
-    .btn{
-      appearance:none; border:none; cursor:pointer; text-decoration:none;
-      padding:15px 20px; border-radius:18px; font-family:inherit; font-weight:800; letter-spacing:.04em;
-      transition:.25s ease; display:inline-flex; align-items:center; justify-content:center;
-    }
-    .btn-primary{background:linear-gradient(135deg, var(--purple), var(--purple2)); color:white; box-shadow:var(--shadow)}
-    .btn-primary:hover{transform:translateY(-2px); filter:brightness(1.05)}
-    .btn-ghost{background:rgba(255,255,255,.06); color:var(--text); border:1px solid var(--stroke)}
-    .btn-ghost:hover{background:rgba(255,255,255,.10)}
-
-    .stats{display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-top:28px}
-    .stat{
-      background:var(--card); border:1px solid var(--stroke); border-radius:22px;
-      padding:18px 16px; backdrop-filter:blur(14px)
-    }
-    .stat small{display:block; color:#d8b4fe; font-size:11px; letter-spacing:.18em; text-transform:uppercase}
-    .stat strong{display:block; margin-top:10px; font-size:18px}
-
-    .hero-media{position:relative}
-    .hero-media::before{
-      content:""; position:absolute; inset:-28px; border-radius:40px;
-      background:radial-gradient(circle, rgba(168,85,247,.22), transparent 58%);
-      filter:blur(18px); z-index:-1;
-    }
-    .media-stack{display:grid; gap:14px}
-    .frame{
-      overflow:hidden; border-radius:32px; border:1px solid var(--stroke);
-      background:rgba(255,255,255,.04); box-shadow:0 18px 60px rgba(0,0,0,.35);
-    }
-    .frame img{display:block; width:100%; height:100%; object-fit:cover}
-    .frame.big{height:330px}
-    .two-up{display:grid; grid-template-columns:1fr 1fr; gap:14px}
-    .frame.sm{height:220px}
-
-    .section{padding:58px 0}
-    .section-head{display:flex; align-items:flex-end; justify-content:space-between; gap:16px; margin-bottom:20px}
-    .section-head h2{font-size:clamp(30px, 4vw, 48px); line-height:1}
-    .section-head p{color:var(--muted); max-width:620px; line-height:1.7; font-size:14px}
-    .section-tag{color:#d8b4fe; letter-spacing:.28em; font-size:11px; text-transform:uppercase; margin-bottom:10px}
-
-    .grid{display:grid; gap:16px}
-    .cards-3{grid-template-columns:repeat(3,1fr)}
-    .cards-2{grid-template-columns:repeat(2,1fr)}
-
-    .card{
-      background:var(--card); border:1px solid var(--stroke); border-radius:var(--radius);
-      backdrop-filter:blur(14px); overflow:hidden; box-shadow:0 10px 30px rgba(0,0,0,.20)
-    }
-    .card-body{padding:22px}
-    .card h3{font-size:22px; line-height:1.15}
-    .card p{color:var(--muted); line-height:1.75; margin-top:10px; font-size:14px}
-
-    .video-thumb{
-      aspect-ratio:16/9;
-      position:relative;
-      background:linear-gradient(135deg, rgba(46,16,101,.98), rgba(0,0,0,.96));
-      border-bottom:1px solid var(--stroke);
-      overflow:hidden;
-    }
-    .video-thumb::before{
-      content:""; position:absolute; inset:0;
-      background:radial-gradient(circle at center, rgba(255,255,255,.12), transparent 42%);
-    }
-    .play-badge{
-      width:72px; height:72px; border-radius:999px; position:absolute; inset:50% auto auto 50%; transform:translate(-50%,-50%);
-      display:grid; place-items:center; background:rgba(0,0,0,.42); border:1px solid rgba(255,255,255,.12);
-      box-shadow:0 0 30px rgba(168,85,247,.42); font-size:28px;
-    }
-    .video-meta{display:flex; align-items:center; gap:8px; color:#e9d5ff; font-size:12px; letter-spacing:.08em; text-transform:uppercase}
-
-    .embed-wrap{aspect-ratio:16/9; background:#000}
-    .embed-wrap iframe{width:100%; height:100%; border:0; display:block}
-
-    .footer-card{
-      background:rgba(255,255,255,.05); border:1px solid var(--stroke);
-      border-radius:34px; padding:28px; backdrop-filter:blur(14px)
-    }
-    .footer-card h3{font-size:clamp(28px, 4vw, 54px); line-height:1.06}
-    .footer-card p{color:var(--muted); line-height:1.8; margin-top:14px; max-width:800px}
-    footer{padding:0 0 34px; color:rgba(255,255,255,.45); text-align:center; font-size:13px; letter-spacing:.12em}
-
-    @media (max-width: 980px){
-      .hero-grid{grid-template-columns:1fr}
-      .stats{grid-template-columns:repeat(2,1fr)}
-      .cards-3,.cards-2{grid-template-columns:1fr}
-      .section-head{flex-direction:column; align-items:flex-start}
-    }
-    @media (max-width: 700px){
-      .nav{gap:12px; flex-direction:column; align-items:flex-start}
-      .nav-links{gap:6px}
-      .nav-links a{padding:9px 12px; font-size:12px}
-      .stats{grid-template-columns:1fr}
-      .two-up{grid-template-columns:1fr}
-      .frame.big{height:250px}
-      .frame.sm{height:200px}
-    }
-  </style>
+.list{display:grid;gap:10px}
+.line-item{background:#f8fafc;border-radius:15px;padding:13px;border:1px solid var(--line)}
+.line-top{display:flex;align-items:center;gap:10px}.badge{min-width:42px;height:38px;border-radius:11px;background:var(--primary);color:#fff;display:grid;place-items:center;font-weight:800}
+.line-item strong{font-size:15px}.line-item small{color:var(--muted);display:block;margin-top:3px}
+.bottom{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(560px,100%);background:rgba(255,255,255,.96);backdrop-filter:blur(10px);border-top:1px solid var(--line);display:grid;grid-template-columns:1fr 1fr auto;gap:8px;padding:10px 14px calc(10px + env(safe-area-inset-bottom))}
+.bottom button{border:0;background:transparent;padding:9px;border-radius:12px;font-weight:800;color:var(--muted)}
+.bottom button.active{background:#eef2ff;color:#3730a3}
+.admin-nav{width:48px;justify-self:end}
+#adminDashboard .line-item{background:#f8fafc}
+@media(max-width:380px){.route-grid{grid-template-columns:repeat(3,1fr)}}
+</style>
 </head>
 <body>
-  <div class="bg-grid"></div>
-  <div class="bg-pulse"></div>
-  <div class="bg-pulse2"></div>
-  <div class="particles" id="particles"></div>
+<div class="app">
+<header class="top">
+  <small>Nahlásenie udalosti v MHD</small>
+  <h1>🚍 Žilina MHD</h1>
+</header>
 
-  <header>
-    <div class="container nav">
-      <a class="brand" href="#home">
-        <div class="brand-mark">
-  <img src="https://yt3.googleusercontent.com/v1gH2mLY_yVqpWyiz45eYOM-R9WKyG_f1BElJnYf7RcA2T2J1DolguMpk8T1BhXYqpFyiz9e4wQ=s160-c-k-c0x00ffffff-no-rj" alt="logo">
+<main class="content">
+  <section id="home" class="section">
+    <div class="hero">
+      <h2>MHD Žilina</h2>
+      <p>Vyber linku, smer a zastávku a odošli hlásenie za pár sekúnd.</p>
+      <button class="big-btn" onclick="showReport()">📍 Nahlásiť udalosť</button>
+    </div>
+
+    <div class="card section">
+      <h3>Revízor.fun</h3>
+      <div class="meta">Stránka: www.revizor.fun</div>
+    </div>
+
+    <div class="card section">
+      <h3>Aktuálne linky</h3>
+      <div id="quickLines" class="list"></div>
+      <div class="meta">Údaje liniek sú založené na aktuálnych prehľadoch DPMŽ a verejne dostupných cestovných poriadkoch.</div>
+    </div>
+  </section>
+
+  <section id="report" class="section hidden">
+    <div class="card">
+      <div class="progress" aria-label="Postup hlásenia">
+        <i id="p1" class="on"></i><i id="p2"></i><i id="p3"></i><i id="p4"></i>
+      </div>
+
+      <div id="reportStep1" class="report-step">
+        <div class="step"><div class="n">1</div><strong>Vyber číslo linky</strong></div>
+        <div id="routeButtons" class="route-grid"></div>
+      </div>
+
+      <div id="reportStep2" class="report-step hidden">
+        <button class="back" onclick="goReportStep(1)">← Späť</button>
+        <div class="step"><div class="n">2</div><strong>Vyber smer</strong></div>
+        <select id="direction" onchange="loadStops()"></select>
+        <button class="primary" onclick="goReportStep(3)">Pokračovať</button>
+      </div>
+
+      <div id="reportStep3" class="report-step hidden">
+        <button class="back" onclick="goReportStep(2)">← Späť</button>
+        <div class="step"><div class="n">3</div><strong>Vyber aktuálnu zastávku</strong></div>
+        <select id="stop"></select>
+        <button class="primary" onclick="goReportStep(4)">Pokračovať</button>
+      </div>
+
+      <div id="reportStep4" class="report-step hidden">
+        <button class="back" type="button" onclick="goReportStep(3)">← Späť</button>
+        <div class="step"><div class="n">4</div><strong>Zadaj 4-miestny kód</strong></div>
+        <p class="meta">Po zadaní štyroch číslic sa automaticky zobrazí dostupná možnosť.</p>
+
+        <input id="code" type="hidden" value="">
+        <div id="codeDisplay" class="code-display" aria-label="Zadaný kód">
+          <span>•</span><span>•</span><span>•</span><span>•</span>
+        </div>
+
+        <div class="keypad" aria-label="Číselná klávesnica">
+          <button type="button" onclick="pressKey('1')">1</button>
+          <button type="button" onclick="pressKey('2')">2</button>
+          <button type="button" onclick="pressKey('3')">3</button>
+          <button type="button" onclick="pressKey('4')">4</button>
+          <button type="button" onclick="pressKey('5')">5</button>
+          <button type="button" onclick="pressKey('6')">6</button>
+          <button type="button" onclick="pressKey('7')">7</button>
+          <button type="button" onclick="pressKey('8')">8</button>
+          <button type="button" onclick="pressKey('9')">9</button>
+          <button class="key-empty" aria-hidden="true" tabindex="-1"></button>
+          <button type="button" onclick="pressKey('0')">0</button>
+          <button type="button" onclick="deleteKey()" aria-label="Vymazať posledné číslo">⌫</button>
+        </div>
+
+        <div id="codeChoices" class="code-choices hidden">
+          <div id="codeChoiceTitle" class="choice-title"></div>
+          <button id="wifiChoice" class="choice-btn hidden" type="button"
+                  onclick="chooseReportType('Slabá Wi-Fi')">Slabá Wi-Fi</button>
+          <button id="inspectorChoice" class="choice-btn hidden" type="button"
+                  onclick="chooseReportType('Revízor')">Revízor</button>
+        </div>
+
+        <button class="ghost" type="button" onclick="resetReport()">Skúsiť znova</button>
+        <div id="success" class="success hidden"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="lines" class="section hidden">
+    <div class="card">
+      <h3>🚌 Všetky linky</h3>
+      <div id="allLines" class="list"></div>
+    </div>
+  </section>
+
+  <section id="admin" class="section hidden">
+    <div class="card">
+      <h3>🔐 Admin</h3>
+
+      <div id="adminLoginBox">
+        <p class="meta">Prihlásenie je chránené serverom. Heslo nie je uložené v HTML.</p>
+
+        <label for="adminUser">Používateľ</label>
+        <input id="adminUser" autocomplete="username"
+               style="width:100%;padding:14px;border:1px solid #d7dce3;border-radius:13px">
+
+        <label for="adminPass">Heslo</label>
+        <input id="adminPass" type="password" autocomplete="current-password"
+               style="width:100%;padding:14px;border:1px solid #d7dce3;border-radius:13px">
+
+        <button class="primary" type="button" onclick="adminLogin()">Prihlásiť</button>
+        <div id="adminStatus" class="notice hidden"></div>
+      </div>
+
+      <div id="adminDashboard" class="hidden">
+        <div class="line-top" style="justify-content:space-between;margin-bottom:12px">
+          <h3 style="margin:0">Hlásenia</h3>
+          <button class="ghost" type="button" onclick="loadAdminReports()" style="width:auto;margin-top:0">Obnoviť</button>
+        </div>
+        <div id="adminReports" class="list"></div>
+        <button class="ghost" type="button" onclick="adminLogout()">Odhlásiť</button>
+      </div>
+
+      <button class="ghost" type="button" onclick="showHome()">Späť</button>
+    </div>
+  </section>
+</main>
+
+<nav class="bottom">
+  <button id="navHome" class="active" onclick="showHome()">⌂ Domov</button>
+  <button id="navLines" onclick="showLines()">🚌 Linky</button>
+  <button id="navAdmin" class="admin-nav" onclick="showAdmin()" aria-label="Admin">🔐</button>
+</nav>
 </div>
 
-<style>
-.brand-mark{
-  width:48px;
-  height:48px;
-  border-radius:18px;
-  overflow:hidden;
-  background:linear-gradient(135deg,#a855f7,#d946ef);
-  box-shadow:0 0 35px rgba(168,85,247,.25);
+<script>
+const L = {
+"1": {
+ type:"trolejbus", dirs:{
+  "Matice slovenskej":["Kvačalova, DPMŽ","Priemyselná","Závodská","Hálkova","Polícia","Veľká okružná, Aupark","Predmestská","Košická, TESCO hypermarket","Sv. Cyrila a Metoda","Obchodná","Matice slovenskej"],
+  "Kvačalova, DPMŽ":["Matice slovenskej","Obchodná","Sv. Cyrila a Metoda","Košická, TESCO hypermarket","Predmestská","Veľká okružná, Aupark","Polícia","Hálkova","Závodská","Kvačalova, DPMŽ"]
+ }},
+"3": {
+ type:"trolejbus", dirs:{
+  "Jaseňová":["Jaseňová","Limbová","Smreková","Centrálna","Rudnayova","Tulipánová","Park Ľudovíta Štúra","Fakultná nemocnica","Štefánikovo námestie","Železničná stanica","Hurbanova","Polícia","Veľká okružná, Aupark","Fakultná nemocnica","Park Ľudovíta Štúra","Tulipánová","Rudnayova","Centrálna","Smreková","Limbová","Jaseňová"]
+ }},
+"4": {
+ type:"trolejbus", dirs:{
+  "Matice slovenskej":["Fatranská","Matice slovenskej","Obchodná","Sv. Cyrila a Metoda","Košická, TESCO hypermarket","Predmestská","Štefánikovo námestie","Železničná stanica","Hurbanova","Polícia","Komenského","Mostná","Hlinská","Poľná","Smreková","Limbová","Jaseňová","Pod hájom","Žilinská univerzita","Fatranská","Matice slovenskej"]
+ }},
+"5": {
+ type:"trolejbus", dirs:{
+  "Jaseňová":["Fatranská","Matice slovenskej","Obchodná","Sv. Cyrila a Metoda","Poštová","Plaváreň","Fakultná nemocnica","Veľká okružná, Aupark","Komenského","Mostná","Hlinská","Poľná","Smreková","Limbová","Jaseňová"],
+  "Fatranská":["Jaseňová","Limbová","Smreková","Poľná","Hlinská","Mostná","Veľká okružná, Aupark","Fakultná nemocnica","Plaváreň","Poštová","Sv. Cyrila a Metoda","Obchodná","Matice slovenskej","Fatranská"]
+ }},
+"6": {
+ type:"trolejbus", dirs:{
+  "Matice slovenskej":["Stodolova","Slnečné námestie","Mateja Bela","Hôrecká","Žitná","Závodského","Závodská","Hálkova","Polícia","Hurbanova","Železničná stanica","Štefánikovo námestie","Fakultná nemocnica","Plaváreň","Dubeň, obch. centrum"],
+  "Stodolova":["Matice slovenskej","Obchodná","Sv. Cyrila a Metoda","Poštová","Dubeň, obch. centrum","Plaváreň","Fakultná nemocnica","Štefánikovo námestie","Železničná stanica","Hurbanova","Polícia","Hálkova","Závodská","Závodského","Žitná","Hôrecká","Essenská","Mateja Bela","Slnečné námestie","Stodolova"]
+ }},
+"7": {
+ type:"trolejbus", dirs:{
+  "Sv. Cyrila a Metoda":["Stodolova","Slnečné námestie","Mateja Bela","Hôrecká","Žitná","Závodského","Závodská","Hálkova","Polícia","Komenského","Mostná","Hlinská","Poľná","Smreková","Limbová","Jaseňová","Pod hájom","Žilinská univerzita","Fatranská","Obchodná","Sv. Cyrila a Metoda"],
+  "Stodolova":["Sv. Cyrila a Metoda","Obchodná","Fatranská","Žilinská univerzita","Pod hájom","Jaseňová","Limbová","Smreková","Poľná","Hlinská","Mostná","Polícia","Hálkova","Závodská","Závodského","Žitná","Hôrecká","Essenská","Mateja Bela","Slnečné námestie","Stodolova"]
+ }},
+"14": {
+ type:"trolejbus", dirs:{
+  "Fatranská":["Matice slovenskej","Fatranská","Žilinská univerzita","Pod hájom","Jaseňová","Limbová","Smreková","Poľná","Hlinská","Mostná","Polícia","Hurbanova","Železničná stanica","Štefánikovo námestie","Predmestská","Košická, TESCO hypermarket","Sv. Cyrila a Metoda","Obchodná","Matice slovenskej","Fatranská"]
+ }},
+"16": {
+ type:"trolejbus", dirs:{
+  "Stodolova":["Stodolova","Slnečné námestie","Mateja Bela","Hôrecká","Žitná","Závodského","Závodská","Hálkova","Polícia","Veľká okružná, Aupark","Štefánikovo námestie","Železničná stanica","Hurbanova","Polícia","Hálkova","Závodská","Závodského","Žitná","Hôrecká","Essenská","Mateja Bela","Slnečné námestie","Stodolova"]
+ }},
+"20": {
+ type:"autobus", dirs:{
+  "Bytčica":["Bytčica","Kultúrny dom","Na stanicu","Pažite","Stanica Solinky","Elektrovod","Poľná","Hlinská","Mostná","Fakultná nemocnica","Plaváreň","Poštová","Sv. Cyrila a Metoda","Obchodná","Matice slovenskej","Zvolenská","Rosinská, plemenársky podnik","Rosinská, Výskumný ústav výpočtovej techniky","Fatranská","Matice slovenskej","Obchodná","Sv. Cyrila a Metoda","Poštová","Plaváreň","Antona Bernoláka","Stavomontáže","Elektrovod","Stanica Solinky","Pažite","Na stanicu","Kultúrny dom","Bytčica"]
+ }},
+"21": {
+ type:"autobus", dirs:{
+  "Považský Chlmec":["Bánová","K cintorínu","Námestie sv. Jána Bosca","Oslobodenia","Jedľová","Žitná","Závodského","Závodská","Hálkova","Veľká okružná","Hurbanova","Kysucká","Budatínsky hrad","Pri Kysuci","Chlmecké námestie","Bytčianska","Považský Chlmec"],
+  "Bánová":["Považský Chlmec","Bytčianska","Chlmecké námestie","Pri Kysuci","Budatínsky hrad","Kysucká","Hurbanova","Veľká okružná","Hálkova","Závodská","Závodského","Žitná","Jedľová","Oslobodenia","Námestie sv. Jána Bosca","K cintorínu","Bánová"]
+ }},
+"22": {
+ type:"autobus", dirs:{
+  "Bytčica":["Brodno","Broďňanská","Zábrežná","Budatínsky hrad","Kysucká","Železničná stanica","Štefánikovo námestie","Veľká okružná, Aupark","Hálkova","Saleziánska","Stavomontáže","Elektrovod","Stanica Solinky","Pažite","Na stanicu","Kultúrny dom","Bytčica"],
+  "Brodno":["Bytčica","Kultúrny dom","Na stanicu","Pažite","Stanica Solinky","Elektrovod","Stavomontáže","Saleziánska","Hálkova","Veľká okružná, Aupark","Štefánikovo námestie","Železničná stanica","Kysucká","Budatínsky hrad","Zábrežná","Broďňanská","Brodno"]
+ }},
+"23": {
+ type:"autobus", dirs:{
+  "Dolná":["Železničná stanica","Kysucká","Pri Váhu","Dolná"],
+  "Železničná stanica":["Dolná","Pri Váhu","Budatínsky hrad","Kysucká","Železničná stanica"]
+ }},
+"24": {
+ type:"autobus", dirs:{
+  "Magočovská":["Priehradná","Furdekova","Oceliarska","Bratislavská","Hollého","Hurbanova","Železničná stanica","Štefánikovo námestie","Predmestská","Košická, TESCO hypermarket","Pri celulózke","Rosinky","Bagarova","Rakové","Dolná Trnovská","Potoky","Cintorínska","Ovocinárska","Horná Trnovská","Magočovská"],
+  "Priehradná":["Magočovská","Horná Trnovská","Ovocinárska","Cintorínska","Potoky","Dolná Trnovská","Rakové","Bagarova","Rosinky","Pri celulózke","Košická, TESCO hypermarket","Predmestská","Štefánikovo námestie","Železničná stanica","Hurbanova","Hollého","Bratislavská","Oceliarska","Furdekova","Priehradná"]
+ }},
+"26": {
+ type:"autobus", dirs:{
+  "Kamenná, PRIUS":["Rosinská, Výskumný ústav výpočtovej techniky","Rosinská, plemenársky podnik","Zvolenská","Pri celulózke","Košická, TESCO hypermarket","Predmestská","Štefánikovo námestie","Železničná stanica","Hurbanova","Veľká okružná","Hálkova","Závodská","Bánovská cesta","Kamenná, obchodné centrum","Kamenná, domáce potreby","Kamenná, kovošrot","Kamenná, PRIUS"],
+  "Rosinská, Výskumný ústav výpočtovej techniky":["Kamenná, PRIUS","Kamenná, kovošrot","Kamenná, domáce potreby","Kamenná, obchodné centrum","Bánovská cesta","Závodská","Hálkova","Veľká okružná","Hurbanova","Železničná stanica","Štefánikovo námestie","Predmestská","Košická, TESCO hypermarket","Pri celulózke","Zvolenská","Rosinská, plemenársky podnik","Rosinská, Výskumný ústav výpočtovej techniky"]
+ }},
+"27": {
+ type:"autobus", dirs:{
+  "Zástranie":["Stodolova","Pod vinicou","Kvačalova, DPMŽ","Cestárska","Kragujevská","Hálkova","Polícia","Hurbanova","Kysucká","Budatínsky hrad","Na lány","Letná","Farebná","Budatínska","Údolná","Prípojná","Salaš","Na chotári","Na Straník","Zástranie"],
+  "Stodolova":["Zástranie","Na Straník","Na chotári","Salaš","Prípojná","Údolná","Budatínska","Farebná","Letná","Na lány","Budatínsky hrad","Kysucká","Hurbanova","Rázusova","Kragujevská","Cestárska","Kvačalova, DPMŽ","Pod vinicou","Stodolova"]
+ }},
+"29": {
+ type:"autobus", dirs:{
+  "Železničná stanica Cestárska":["Žilinská Lehota","Kortinská","Pod záhradkou","Rázcestie Hričov","Vodná nádrž Hričov","Pod Kozínom","Prieložná","Hričovská","Cestárska","Priemyselná","Závodská","Hálkova","Veľká okružná","Hurbanova","Železničná stanica"],
+  "Žilinská Lehota":["Železničná stanica","Hurbanova","Veľká okružná","Hálkova","Závodská","Priemyselná","Cestárska","Oceliarska","Furdekova","Priehradná","Prieložná","Pod Kozínom","Vodná nádrž Hričov","Rázcestie Hričov","Pod záhradkou","Kortinská","Žilinská Lehota"]
+ }},
+"30": {
+ type:"autobus", dirs:{
+  "Univerzitná":["Vranie","Jastrabia","Pri Kysuci","Budatínsky hrad","Kysucká","Železničná stanica","Štefánikovo námestie","Fakultná nemocnica","Plaváreň","Nová menza","Univerzitná"],
+  "Vranie":["Univerzitná","Fatranská","Športové centrum","Plaváreň","Fakultná nemocnica","Štefánikovo námestie","Železničná stanica","Kysucká","Budatínsky hrad","Pri Kysuci","Jastrabia","Vranie"]
+ }},
+"31": {
+ type:"autobus", dirs:{
+  "Asanačný podnik Rybné námestie":["Pietna, Krematórium","Kvačalova, DPMŽ","Cestárska","Kragujevská","Rázusova","Hurbanova","Železničná stanica","Predmestská","Košická, TESCO hypermarket","Pri celulózke","Šibenice, STK","Motel Šibenice","HYZA","Rybné námestie","Asanačný podnik"],
+  "Železničná stanica / Hurbanova / Kvačalova / Pietna, Krematórium":["Asanačný podnik","Rybné námestie","HYZA","Motel Šibenice","Šibenice, STK","Pri celulózke","Košická, TESCO hypermarket","Predmestská","Železničná stanica","Hurbanova","Rázusova","Kragujevská","Cestárska","Kvačalova, DPMŽ","Pietna, Krematórium"]
+ }},
+"50": {
+ type:"nočná", dirs:{
+  "Stodolova":["Železničná stanica","Hurbanova","Polícia","Veľká okružná, Aupark","Predmestská","Košická, TESCO hypermarket","Sv. Cyrila a Metoda","Obchodná","Matice slovenskej","Fatranská","Pod hájom","Jaseňová","Limbová","Smreková","Poľná","Hlinská","Mostná","Polícia","Hálkova","Závodská","Závodského","Žitná","Hôrecká","Essenská","Mateja Bela","Slnečné námestie","Stodolova"],
+  "Železničná stanica":["Stodolova","Slnečné námestie","Mateja Bela","Essenská","Hôrecká","Žitná","Závodského","Závodská","Hálkova","Polícia","Mostná","Hlinská","Poľná","Smreková","Limbová","Jaseňová","Pod hájom","Fatranská","Matice slovenskej","Obchodná","Sv. Cyrila a Metoda","Košická, TESCO hypermarket","Predmestská","Veľká okružná, Aupark","Hurbanova","Železničná stanica"]
+ }},
+"67": {
+ type:"autobus", dirs:{
+  "Vodné dielo":["Stodolova","Slnečné námestie","Mateja Bela","Hôrecká","Žitná","Závodského","Závodská","Hálkova","Komenského","Mostná","Hlinská","Poľná","Smreková","Limbová","Jaseňová","Pod hájom","Žilinská univerzita","Fatranská","Matice slovenskej","eXtreme park","Vodné dielo"],
+  "Stodolova":["Vodné dielo","eXtreme park","Matice slovenskej","Fatranská","Žilinská univerzita","Pod hájom","Jaseňová","Limbová","Smreková","Poľná","Hlinská","Mostná","Hálkova","Závodská","Závodského","Žitná","Hôrecká","Essenská","Mateja Bela","Slnečné námestie","Stodolova"]
+ }}
+};
+
+const ids=Object.keys(L).sort((a,b)=>+a-+b);
+let selectedLine=null;
+
+function fillLineLists(){
+ const all=document.getElementById("allLines");
+ const quick=document.getElementById("quickLines");
+ all.innerHTML=""; quick.innerHTML="";
+ ids.forEach(id=>{
+  const d=L[id], dirs=Object.keys(d.dirs);
+  const el=document.createElement("div");
+  el.className="line-item";
+  el.innerHTML=`<div class="line-top"><div class="badge">${id}</div><div><strong>${d.type}</strong><small>${dirs.join(" ↔ ")}</small></div></div>`;
+  all.appendChild(el);
+ });
+ ids.slice(0,6).forEach(id=>{
+  const d=L[id];
+  const el=document.createElement("div"); el.className="line-item";
+  el.innerHTML=`<div class="line-top"><div class="badge">${id}</div><div><strong>${d.type}</strong><small>${Object.keys(d.dirs).join(" ↔ ")}</small></div></div>`;
+  quick.appendChild(el);
+ });
 }
 
-.brand-mark img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
+function showReport(){
+ document.getElementById("home").classList.add("hidden");
+ document.getElementById("lines").classList.add("hidden");
+ document.getElementById("report").classList.remove("hidden");
+ document.getElementById("navHome").classList.add("active");
+ document.getElementById("navLines").classList.remove("active");
+ renderRouteButtons();
+ resetReport();
+ window.scrollTo({top:0,behavior:"smooth"});
 }
-</style>
-        <div class="brand-text">
-          <strong>Z4IX</strong>
-          <span>@Z4IX_MC</span>
-        </div>
-      </a>
 
-      <nav class="nav-links">
-        <a href="#home">Home</a>
-        <a href="#videos">Videos</a>
-        <a href="#about">About</a>
-        <a href="#contact">Contacts</a>
-      </nav>
-    </div>
-  </header>
+function renderRouteButtons(){
+ const box=document.getElementById("routeButtons");
+ box.innerHTML="";
+ ids.forEach(id=>{
+   const b=document.createElement("button");
+   b.className="route-btn"; b.textContent=id;
+   b.onclick=()=>selectLine(id,b);
+   box.appendChild(b);
+ });
+}
 
-  <main>
-    <section class="hero" id="home">
-      <div class="container hero-grid">
-        <div>
-          <div class="eyebrow">Minecraft creator • Z4IX</div>
-          <h1>
-            Z4IX
-            <span class="accent">Minecraft</span>
-          </h1>
-          <p class="lead">
-            BedWars in Minecraft are best.
-          </p>
+function selectLine(id,btn){
+ selectedLine=id;
+ document.querySelectorAll(".route-btn").forEach(x=>x.classList.remove("active"));
+ btn.classList.add("active");
+ const s=document.getElementById("direction");
+ s.innerHTML="";
+ Object.keys(L[id].dirs).forEach(dir=>{
+   const o=document.createElement("option");o.value=dir;o.textContent=dir;s.appendChild(o);
+ });
+ loadStops();
+ goReportStep(2);
+}
 
-          <div class="actions">
-            <a class="btn btn-primary" href="https://www.youtube.com/@Z4IX_MC" target="_blank" rel="noopener">YT: @Z4IX_MC</a>
-            <a class="btn btn-ghost" href="#videos">My videos</a>
-          </div>
+function loadStops(){
+ if(!selectedLine) return;
+ const dir=document.getElementById("direction").value;
+ const stop=document.getElementById("stop");
+ stop.innerHTML="";
+ L[selectedLine].dirs[dir].forEach((name,i)=>{
+   const o=document.createElement("option");o.value=name;o.textContent=`${i+1}. ${name}`;stop.appendChild(o);
+ });
+ document.getElementById("success").classList.add("hidden");
+}
 
-          <div class="stats">
-            <div class="stat"><small>Name</small><strong>Z4IX</strong></div>
-            <div class="stat"><small>YouTube</small><strong>@Z4IX_MC</strong></div>
-            <div class="stat"><small>Content</small><strong>Minecraft</strong></div>
-            <div class="stat"><small>Style</small><strong>Dark Purple</strong></div>
-          </div>
-        </div>
+function goReportStep(n){
+ if(n>=2 && !selectedLine) return;
+ if(n>=3) loadStops();
+ [1,2,3,4].forEach(i=>{
+   document.getElementById("reportStep"+i).classList.toggle("hidden",i!==n);
+   document.getElementById("p"+i).classList.toggle("on",i<=n);
+ });
+ window.scrollTo({top:0,behavior:"smooth"});
+}
 
-        <div class="hero-media">
-          <div class="media-stack">
-            <div class="frame big">
-              <img src="https://yt3.googleusercontent.com/v1gH2mLY_yVqpWyiz45eYOM-R9WKyG_f1BElJnYf7RcA2T2J1DolguMpk8T1BhXYqpFyiz9e4wQ=s160-c-k-c0x00ffffff-no-rj"
-          </div>
-        </div>
-      </div>
-    </section>
+function updateCodeDisplay(){
+  const code=document.getElementById("code").value;
+  const dots=[...document.querySelectorAll("#codeDisplay span")];
+  dots.forEach((d,i)=>d.textContent=i<code.length ? "●" : "•");
 
-    <section class="section" id="videos">
-  <div class="container">
+  const choices=document.getElementById("codeChoices");
+  const wifi=document.getElementById("wifiChoice");
+  const inspector=document.getElementById("inspectorChoice");
+  const title=document.getElementById("codeChoiceTitle");
 
-    <div class="section-tag">YouTube videos</div>
+  choices.classList.toggle("hidden",code.length!==4);
+  wifi.classList.add("hidden");
+  inspector.classList.add("hidden");
 
-    <div class="section-head">
-      <h2>My videos</h2>
-      <p>Some of my videos here</p>
-    </div>
-
-    <div class="grid cards-3">
-
-      <article class="card">
-        <div class="embed-wrap">
-
-          <iframe
-            width="100%"
-            height="250"
-            src="https://www.youtube.com/embed/NU2LbFNDRJY?autoplay=1&mute=1&loop=1&playlist=NU2LbFNDRJY"
-            title="Z4IX video 1"
-            frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
-            allowfullscreen>
-          </iframe>
-
-        </div>
-
-        <div class="card-body">
-          <div class="video-meta">▶ Video 1</div>
-          <h3>Random YT short</h3>
-          <p>When he know...</p>
-        </div>
-
-      </article>
-
-    </div>
-  </div>
-</section>
-          <section class="section" id="videos">
-  <div class="container">
-  <div class="grid cards-3">
-
-      <article class="card">
-        <div class="embed-wrap">
-
-          <iframe
-            width="100%"
-            height="250"
-            src="https://www.youtube.com/embed/NU2LbFNDRJY?autoplay=1&mute=1&loop=1&playlist=NU2LbFNDRJY"
-            title="Z4IX video 1"
-            frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
-            allowfullscreen>
-          </iframe>
-
-        </div>
-
-        <div class="card-body">
-          <div class="video-meta">▶ Video 1</div>
-          <h3>Random YT short</h3>
-          <p>When he know...</p>
-        </div>
-
-      </article>
-
-    </div>
-  </div>
-</section>
-<section class="section" id="about">
-      <div class="container">
-        <div class="footer-card">
-          <h3>Z4IX • BedWars player</h3>
-          <p>
-            Minecraft player
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="contact">
-      <div class="container">
-        <div class="footer-card">
-          <h3>Z4IX • @Z4IX_MC</h3>
-          <p>
-           Join to me !
-          </p>
-          <div class="actions" style="margin-top:22px">
-            <a class="btn btn-primary" href="https://www.youtube.com/@Z4IX_MC" target="_blank" rel="noopener">Youtube channel</a>
-            <a class="btn btn-primary" href="https://www.youtube.com/@Z4IX_MC" target="_blank" rel="noopener">Discord</a>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer>© 2026 Z4IX</footer>
-
-  <script>
-    const particles = document.getElementById('particles');
-    for (let i = 0; i < 26; i++) {
-      const s = document.createElement('span');
-      s.className = 'particle';
-      s.style.left = Math.random() * 100 + 'vw';
-      s.style.animationDuration = (7 + Math.random() * 9) + 's';
-      s.style.animationDelay = (-Math.random() * 16) + 's';
-      s.style.width = s.style.height = (4 + Math.random() * 6) + 'px';
-      s.style.opacity = (0.25 + Math.random() * 0.75).toFixed(2);
-      particles.appendChild(s);
+  if(code.length===4){
+    if(code==="2224"){
+      title.textContent="Špeciálny kód prijatý";
+      inspector.classList.remove("hidden");
+    }else{
+      title.textContent="Kód prijatý";
+      wifi.classList.remove("hidden");
     }
-  </script>
+  }
+}
+
+function pressKey(key){
+  const input=document.getElementById("code");
+  if(input.value.length>=4) return;
+  input.value += key;
+  updateCodeDisplay();
+}
+
+function deleteKey(){
+  const input=document.getElementById("code");
+  input.value=input.value.slice(0,-1);
+  updateCodeDisplay();
+}
+
+async function chooseReportType(type){
+  const dir=document.getElementById("direction").value;
+  const stop=document.getElementById("stop").value;
+  const s=document.getElementById("success");
+  s.classList.remove("hidden");
+  s.textContent="Odosielam hlásenie…";
+
+  try{
+    const response=await fetch("/api/reports",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        line:selectedLine,
+        direction:dir,
+        stop:stop,
+        type:type
+      })
+    });
+    const data=await response.json();
+    if(!response.ok) throw new Error(data.message||"Hlásenie sa nepodarilo odoslať.");
+    s.textContent="✅ Hlásenie odoslané.";
+  }catch(err){
+    s.textContent="⚠️ Hlásenie sa nepodarilo odoslať. Skontroluj pripojenie.";
+  }
+}
+
+function resetReport(){
+  selectedLine=null;
+  document.getElementById("direction").innerHTML="";
+  document.getElementById("stop").innerHTML="";
+  document.getElementById("code").value="";
+  document.getElementById("success").classList.add("hidden");
+  document.getElementById("codeChoices").classList.add("hidden");
+  document.getElementById("wifiChoice").classList.add("hidden");
+  document.getElementById("inspectorChoice").classList.add("hidden");
+  document.getElementById("codeChoiceTitle").textContent="";
+  document.querySelectorAll(".route-btn").forEach(x=>x.classList.remove("active"));
+  updateCodeDisplay();
+  goReportStep(1);
+}
+
+function showHome(){
+ document.getElementById("home").classList.remove("hidden");
+ document.getElementById("report").classList.add("hidden");
+ document.getElementById("lines").classList.add("hidden");
+ document.getElementById("admin").classList.add("hidden");
+ document.getElementById("navHome").classList.add("active");
+ document.getElementById("navAdmin").classList.remove("active");
+ document.getElementById("navLines").classList.remove("active");
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+function showLines(){
+ document.getElementById("home").classList.add("hidden");
+ document.getElementById("report").classList.add("hidden");
+ document.getElementById("lines").classList.remove("hidden");
+ document.getElementById("admin").classList.add("hidden");
+ document.getElementById("navHome").classList.remove("active");
+ document.getElementById("navLines").classList.add("active");
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+
+
+async function adminLogin(){
+  const user=document.getElementById("adminUser").value.trim();
+  const pass=document.getElementById("adminPass").value;
+  const status=document.getElementById("adminStatus");
+  status.classList.remove("hidden");
+  status.textContent="Prihlasovanie…";
+
+  try{
+    const response=await fetch("/api/admin/login",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      credentials:"same-origin",
+      body:JSON.stringify({username:user,password:pass})
+    });
+    const data=await response.json();
+    if(!response.ok) throw new Error(data.message||"Prihlásenie sa nepodarilo.");
+    status.textContent="✓ Prihlásenie úspešné.";
+    document.getElementById("adminLoginBox").classList.add("hidden");
+    document.getElementById("adminDashboard").classList.remove("hidden");
+    loadAdminReports();
+  }catch(err){
+    status.textContent=err.message||"Prihlásenie sa nepodarilo.";
+  }
+}
+
+async function loadAdminReports(){
+  const box=document.getElementById("adminReports");
+  box.innerHTML='<div class="notice">Načítavam hlásenia…</div>';
+
+  try{
+    const response=await fetch("/api/admin/reports",{
+      credentials:"same-origin"
+    });
+    const data=await response.json();
+    if(!response.ok) throw new Error(data.message||"Nepodarilo sa načítať hlásenia.");
+
+    if(!data.reports.length){
+      box.innerHTML='<div class="notice">Zatiaľ nemáš žiadne hlásenia.</div>';
+      return;
+    }
+
+    box.innerHTML="";
+    data.reports.forEach(report=>{
+      const el=document.createElement("div");
+      el.className="line-item";
+      const dt=new Date(report.created_at);
+      const time=new Intl.DateTimeFormat("sk-SK",{
+        dateStyle:"medium",
+        timeStyle:"medium",
+        timeZone:"Europe/Bratislava"
+      }).format(dt);
+
+      el.innerHTML=`
+        <div class="line-top">
+          <div class="badge">${escapeHtml(String(report.line))}</div>
+          <div>
+            <strong>${escapeHtml(report.type)}</strong>
+            <small>${escapeHtml(time)}</small>
+          </div>
+        </div>
+        <div class="meta">
+          <strong>Zastávka:</strong> ${escapeHtml(report.stop)}<br>
+          <strong>Smer:</strong> ${escapeHtml(report.direction)}<br>
+          <strong>Čas:</strong> ${escapeHtml(time)}
+        </div>`;
+      box.appendChild(el);
+    });
+  }catch(err){
+    box.innerHTML='<div class="notice">Nepodarilo sa načítať hlásenia.</div>';
+  }
+}
+
+function escapeHtml(value){
+  return value.replace(/[&<>"']/g, ch => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+  }[ch]));
+}
+
+async function adminLogout(){
+  await fetch("/api/admin/logout",{method:"POST",credentials:"same-origin"});
+  document.getElementById("adminLoginBox").classList.remove("hidden");
+  document.getElementById("adminDashboard").classList.add("hidden");
+  document.getElementById("adminUser").value="";
+  document.getElementById("adminPass").value="";
+  document.getElementById("adminStatus").classList.add("hidden");
+}
+
+function showAdmin(){
+  document.getElementById("home").classList.add("hidden");
+  document.getElementById("report").classList.add("hidden");
+  document.getElementById("lines").classList.add("hidden");
+  document.getElementById("admin").classList.remove("hidden");
+  document.getElementById("navHome").classList.remove("active");
+  document.getElementById("navLines").classList.remove("active");
+  document.getElementById("navAdmin").classList.add("active");
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+fillLineLists();
+</script>
+</body>
+</html>
 </body>
 </html>
